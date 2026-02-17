@@ -4,6 +4,7 @@ import { supabase } from "../Supabase/client";
 import { useSession } from "../Context/SessionContext";
 import GameImage from "./GameImage";
 import "../Layout/GameCard.css";
+import { toast } from "sonner";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { FaWindows, FaPlaystation, FaXbox, FaApple } from "react-icons/fa";
 import { SiNintendo } from "react-icons/si";
@@ -16,7 +17,7 @@ export default function GameCard({ game, onRemove }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFav, setLoadingFav] = useState(false);
 
-  const genres = game.genres.map((genre) => genre.name).join(", ");
+  const genres = game.genres?.map((genre) => genre.name).join(", ") || "";
 
   const getPlatformIcon = (platform) => {
     const name = platform.toLowerCase();
@@ -55,7 +56,10 @@ export default function GameCard({ game, onRemove }) {
     e.stopPropagation();
 
     if (!user) {
-      alert("Please log in to use favorites ❤️");
+      toast.error("Please log in to use favorites ❤️", {
+        id: "auth-required",
+        duration: 2000,
+      });
       return;
     }
 
@@ -70,7 +74,21 @@ export default function GameCard({ game, onRemove }) {
         game_image: game.background_image ?? null,
       });
 
-      if (!error) setIsFavorite(true);
+      if (!error) {
+        setIsFavorite(true);
+
+        if (!onRemove) {
+          toast.success("Added to favorites ❤️", {
+            id: "fav-action",
+            duration: 1600,
+          });
+        }
+      } else {
+        toast.error("Something went wrong", {
+          id: "fav-error",
+          duration: 2000,
+        });
+      }
     } else {
       const { error } = await supabase
         .from("favorites")
@@ -80,7 +98,20 @@ export default function GameCard({ game, onRemove }) {
 
       if (!error) {
         setIsFavorite(false);
-        if (onRemove) onRemove();
+
+        if (onRemove) {
+          onRemove();
+        } else {
+          toast.info("Removed from favorites", {
+            id: "fav-action",
+            duration: 1600,
+          });
+        }
+      } else {
+        toast.error("Something went wrong", {
+          id: "fav-error",
+          duration: 2000,
+        });
       }
     }
 
@@ -116,6 +147,7 @@ export default function GameCard({ game, onRemove }) {
       </div>
 
       <GameImage image={game.background_image} />
+
       <h4 className="game_title">{game.name}</h4>
 
       {hidden ? (
@@ -136,3 +168,4 @@ export default function GameCard({ game, onRemove }) {
     </article>
   );
 }
+

@@ -1,82 +1,108 @@
 html, body {
-    height: 100%; 
-    margin: 0;
-    overflow-x: hidden; 
-  }
-  
-    .container {
-    min-height: 100vh;
-    overflow-y: auto;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .games_wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .main {
-    width: 100%;
-    display:flex;
-  }
-  
-  .sidebar {
-    width: 30%;
-  }
-  
-  .games {
-  width: 70%;
-  }
-  
-  .sidebar {
-    background: #ffffffb3; 
-    padding: 20px;
-    width: 250px;
-    border-radius: 10px;
-    }
-  
-  .dropdown {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.container {
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  background: #ffffffb3;
+  padding: 20px;
+  width: 250px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.games {
+  flex: 1;
+  min-width: 0;
+}
+
+.games_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.dropdown {
   margin-top: 10px;
-  margin-bottom: 40px
-  }
-  
-  .dropdown summary {
+  margin-bottom: 40px;
+}
+
+.dropdown summary {
   font-weight: bold;
-  color:#4CAF50; 
-  font-size: 24px; 
+  color: #4CAF50;
+  font-size: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-bottom: 20px; 
-  }
-  
-  .dropdown summary::after {
-  content: " ▼"; 
-  font-size: 18px; 
+  margin-bottom: 20px;
+}
+
+.dropdown summary::after {
+  content: " ▼";
+  font-size: 18px;
   margin-left: 10px;
-  }
-  
-  .dropdown ul {
+}
+
+.dropdown ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 200px; 
-  overflow-y: auto; 
-  background: #ffffffb3; 
   padding: 10px;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #ffffffb3;
   border-radius: 5px;
-  }
-  
-  .dropdown li {
+}
+
+.dropdown li {
   font-weight: bold;
-  color: #171616; 
+  color: #171616;
   padding: 10px 0;
   font-size: 18px;
-  }
-  
-  .dropdown li:last-child {
+}
+
+.dropdown li:last-child {
   border-bottom: none;
-  } 
+}
+
+
+@media (max-width: 768px) {
+
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .games {
+    width: 100%;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .games_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
+  }
+
+}

@@ -21,6 +21,7 @@ import SignIn from "../Pages/SignIn";
 import Account from "../Pages/Account";
 import Favorites from "../Pages/Favorites";
 
+import Spinner from "../components/Spinner";
 import "../Layout/Layout.css";
 
 function LayoutHome() {
@@ -47,10 +48,14 @@ function LayoutBase() {
 }
 
 function ProtectedRoute() {
-  const { user } = useContext(SessionContext);
+  const { user, loading } = useContext(SessionContext);
+
+  if (loading) {
+    return <Spinner />; 
+  }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return <Outlet />;
@@ -68,8 +73,10 @@ const router = createBrowserRouter(
         <Route path="games/:id/:game" element={<Game />} />
         <Route path="games/platform/:platformID" element={<Platform />} />
         <Route path="search/:query" element={<SearchResults />} />
+
         <Route path="login" element={<SignIn />} />
         <Route path="register" element={<SignUp />} />
+
         <Route path="favorites" element={<Favorites />} />
 
         <Route element={<ProtectedRoute />}>

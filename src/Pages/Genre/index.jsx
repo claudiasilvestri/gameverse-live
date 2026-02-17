@@ -30,7 +30,9 @@ export default function Genre() {
       setLoading(true);
 
       try {
-        const response = await fetch(`${BASE_URL}&genres=${id}&page=${page}`);
+        const response = await fetch(
+          `${BASE_URL}&genres=${id}&page=${page}`
+        );
         const json = await response.json();
 
         if (page === 1) {
@@ -39,11 +41,15 @@ export default function Genre() {
           setGames((prev) => [...prev, ...json.results]);
         }
 
-        const nextResponse = await fetch(
-          `${BASE_URL}&genres=${id}&page=${page + 1}`
-        );
-        const nextJson = await nextResponse.json();
-        setNextPageData(nextJson.results);
+        if (json.next) {
+          const nextResponse = await fetch(
+            `${BASE_URL}&genres=${id}&page=${page + 1}`
+          );
+          const nextJson = await nextResponse.json();
+          setNextPageData(nextJson.results);
+        } else {
+          setNextPageData(null);
+        }
       } catch (error) {
         console.error("Errore nel caricamento:", error);
       } finally {
@@ -79,19 +85,19 @@ export default function Genre() {
 
   return (
     <div className={`${styles.main} ${styles.container}`}>
+      
+      <BackButton />
+
+      {loading && page === 1 && <Spinner />}
+
       <div className={styles.games_wrapper}>
         {games.map((game) => (
-          <div key={game.id} className={styles.gameCard}>
-            <GameCard game={game} />
-          </div>
+          <GameCard key={game.id} game={game} />
         ))}
       </div>
 
       <div ref={loadMoreRef} style={{ height: "20px" }} />
 
-      {loading && page === 1 && <Spinner />}
-
-      <BackButton />
     </div>
   );
 }

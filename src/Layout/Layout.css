@@ -10,6 +10,28 @@
 
 .games {
   flex: 1;
-  padding:20px;
+  min-width: 0; 
+  padding: 20px;
 }
 
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .games {
+    width: 100%;
+    padding: 10px;
+  }
+
+}

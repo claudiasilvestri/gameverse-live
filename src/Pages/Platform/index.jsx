@@ -41,11 +41,15 @@ export default function Platform() {
           setGames((prev) => [...prev, ...json.results]);
         }
 
-        const nextResponse = await fetch(
-          `${BASE_URL}&platforms=${platformID}&page=${page + 1}`
-        );
-        const nextJson = await nextResponse.json();
-        setNextPageData(nextJson.results);
+        if (json.next) {
+          const nextResponse = await fetch(
+            `${BASE_URL}&platforms=${platformID}&page=${page + 1}`
+          );
+          const nextJson = await nextResponse.json();
+          setNextPageData(nextJson.results);
+        } else {
+          setNextPageData(null);
+        }
       } catch (error) {
         console.error("Errore nel caricamento:", error);
       } finally {
@@ -81,19 +85,17 @@ export default function Platform() {
 
   return (
     <div className={`${styles.main} ${styles.container}`}>
+      <BackButton />
+
+      {loading && page === 1 && <Spinner />}
+
       <div className={styles.games_wrapper}>
         {games.map((game) => (
-          <div key={game.id} className={styles.gameCard}>
-            <GameCard game={game} />
-          </div>
+          <GameCard key={game.id} game={game} />
         ))}
       </div>
 
       <div ref={loadMoreRef} style={{ height: "20px" }} />
-
-      {loading && page === 1 && <Spinner />}
-
-      <BackButton />
     </div>
   );
 }

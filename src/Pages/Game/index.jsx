@@ -6,7 +6,6 @@ import BackButton from "../../components/BackButton";
 import Spinner from "../../components/Spinner";
 import noTrailer from "../../Assets/No-Trailer.jpg";
 
-
 const API_KEY = "c6d86a1b0cfc40fa8902c3705680c2ed";
 const YT_KEY = import.meta.env.VITE_YOUTUBE_KEY;
 
@@ -83,12 +82,10 @@ export default function Game() {
         const trailerRes = await fetch(
           `https://api.rawg.io/api/games/${id}/movies?key=${API_KEY}`
         );
-
         const trailerData = await trailerRes.json();
 
         if (trailerData.results?.length > 0) {
           const movie = trailerData.results[0];
-
           const video =
             movie.data?.max || movie.data?.["480"] || movie.data?.["360"];
 
@@ -97,64 +94,6 @@ export default function Game() {
             return;
           }
         }
-
-        const pickBestYoutubeTrailer = (items, gameName) => {
-          const name = gameName.toLowerCase();
-
-          const goodKeywords = [
-            "official trailer",
-            "launch trailer",
-            "reveal trailer",
-            "announcement trailer",
-          ];
-
-          const gamingKeywords = [
-            "game",
-            "videogame",
-            "pc",
-            "xbox",
-            "playstation",
-            "nintendo",
-            "steam",
-          ];
-
-          const badKeywords = [
-            "movie",
-            "film",
-            "soundtrack",
-            "reaction",
-            "review",
-            "walkthrough",
-            "episode",
-            "netflix",
-          ];
-
-          return items.find((video) => {
-            const title = video.snippet.title.toLowerCase();
-            const description = video.snippet.description.toLowerCase();
-
-            const containsGame = title.includes(name);
-
-            const hasGoodKeyword = goodKeywords.some((k) =>
-              title.includes(k)
-            );
-
-            const hasGamingContext =
-              gamingKeywords.some((k) => title.includes(k)) ||
-              gamingKeywords.some((k) => description.includes(k));
-
-            const hasBadKeyword = badKeywords.some(
-              (k) => title.includes(k) || description.includes(k)
-            );
-
-            return (
-              containsGame &&
-              hasGoodKeyword &&
-              hasGamingContext &&
-              !hasBadKeyword
-            );
-          });
-        };
 
         const ytRes = await fetch(
           `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
@@ -165,16 +104,7 @@ export default function Game() {
         const ytData = await ytRes.json();
 
         if (ytData.items?.length > 0) {
-          const bestTrailer = pickBestYoutubeTrailer(
-            ytData.items,
-            gameData.name
-          );
-
-          if (bestTrailer) {
-            setYoutubeId(bestTrailer.id.videoId);
-          } else {
-            setYoutubeId(null);
-          }
+          setYoutubeId(ytData.items[0].id.videoId);
         }
       } catch (error) {
         console.error("Errore nel fetch:", error);
@@ -186,9 +116,9 @@ export default function Game() {
     fetchData();
   }, [id]);
 
- if (loading) {
-  return <Spinner />;
-}
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={styles.centeredContainer}>
@@ -204,7 +134,9 @@ export default function Game() {
           />
 
           {screenshots.length > 0 && (
-            <Carousel images={screenshots.map((s) => s.image).filter(Boolean)} />
+            <Carousel
+              images={screenshots.map((s) => s.image).filter(Boolean)}
+            />
           )}
 
           {trailerUrl || youtubeId ? (
@@ -233,25 +165,25 @@ export default function Game() {
                 className={styles.modalContent}
                 onClick={(e) => e.stopPropagation()}
               >
-                {trailerUrl ? (
-                  <video controls autoPlay className={styles.trailerVideo}>
-                    <source src={trailerUrl} type="video/mp4" />
-                  </video>
-                ) : (
-                  <iframe
-                    className={styles.trailerVideo}
-                    src={`https://www.youtube.com/embed/${youtubeId}`}
-                    title="YouTube Trailer"
-                    frameBorder="0"
-                    allowFullScreen
-                  />
-                )}
+                <div className={styles.videoWrapper}>
+                  {trailerUrl ? (
+                    <video controls autoPlay className={styles.trailerVideo}>
+                      <source src={trailerUrl} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <iframe
+                      className={styles.trailerVideo}
+                      src={`https://www.youtube.com/embed/${youtubeId}`}
+                      title="YouTube Trailer"
+                      allowFullScreen
+                    />
+                  )}
+                </div>
               </div>
             </div>
           )}
 
           <p>{game.description_raw}</p>
-
           <p className={styles.bold}>Rating: {game.rating}</p>
           <p className={styles.bold}>Released: {game.released}</p>
         </div>

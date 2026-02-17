@@ -173,3 +173,11 @@ input:checked + .slider:before {
 .already-registered a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+  .signup-container {
+    width: 80%;
+    max-width: 340px;
+    margin: 40px auto;
+  }
+}

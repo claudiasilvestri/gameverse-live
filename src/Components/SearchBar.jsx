@@ -8,15 +8,13 @@ export default function SearchBar() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     if (!query.trim()) return;
-
     navigate(`/search/${query.trim()}`);
     setQuery("");
   }
 
   return (
-    <form className="search-bar-container" onSubmit={handleSubmit}>
+    <form className="search-container" onSubmit={handleSubmit}>
       <input
         type="text"
         className="search-bar"
@@ -24,7 +22,6 @@ export default function SearchBar() {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for a game..."
       />
-
       <button type="submit" className="search-btn">
         Search
       </button>

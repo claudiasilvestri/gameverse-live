@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 import "../layout/Header.css";
 import SearchBar from "./SearchBar";
 import "../layout/signup.css";
@@ -7,6 +8,7 @@ import { supabase } from "../Supabase/client";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getInfo = async () => {
@@ -29,15 +31,6 @@ export default function Navbar() {
       listener.subscription.unsubscribe();
     };
   }, []);
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
-
-    setUser(null);
-  };
 
   return (
     <nav className="navbar">
@@ -62,19 +55,21 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <span className="welcome-user">
-              Welcome, {user?.user_metadata?.username || "Player"} 👋🏻
-            </span>
+            <Link to="/favorites" className="auth-btn">
+              ❤️ Favorites
+            </Link>
 
             <button
-              className="auth-btn"
-              onClick={() => (window.location.href = "/favorites")}
+              className="account-btn"
+              onClick={() => navigate("/account")}
             >
-              ❤️ Favorites
-            </button>
-
-            <button onClick={signOut} className="auth-btn">
-              Logout
+              <FaUserCircle />
+              <span className="account-name">
+                {user?.user_metadata?.username
+                  ? user.user_metadata.username.charAt(0).toUpperCase() +
+                    user.user_metadata.username.slice(1)
+                  : "Player"}
+              </span>
             </button>
           </>
         )}

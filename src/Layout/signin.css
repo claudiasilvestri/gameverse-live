@@ -167,3 +167,11 @@ input:checked + .slider:before {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 768px) {
+  .signin-container {
+    width: 80%;
+    max-width: 340px;
+    margin: 40px auto;
+  }
+}
