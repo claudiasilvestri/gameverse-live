@@ -32,14 +32,18 @@ export default function SearchResults() {
     fetchResults();
   }, [query]);
 
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="container">
       <BackButton />
 
-      {loading ? (
-        <Spinner />
-      ) : results.length === 0 ? (
-        <p>Nessun risultato trovato.</p>
+      {results.length === 0 ? (
+        <p style={{ textAlign: "center", marginTop: "40px" }}>
+          Nessun risultato trovato.
+        </p>
       ) : (
         <div className="games-grid">
           {results.map((game) => (
