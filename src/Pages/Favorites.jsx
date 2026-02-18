@@ -92,7 +92,7 @@ export default function Favorites() {
                 You haven’t added any favorites yet ❤️
               </p>
             ) : (
-              <div className={styles.games_wrapper}>
+           <div className="games-grid">
                 {games.map((game) => (
                   <GameCard
                     key={game.id}

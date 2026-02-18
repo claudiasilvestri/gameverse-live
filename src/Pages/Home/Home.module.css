@@ -26,8 +26,6 @@
   font-size: 1.1rem;
 }
 
-/* MOBILE */
-
 @media (max-width: 768px) {
 
   .container {

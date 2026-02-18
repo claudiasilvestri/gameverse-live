@@ -1,5 +1,5 @@
 .game_card {
-  width: 250px;
+  width: 100%;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -142,11 +142,4 @@
 
 .favorite_btn svg {
   color: crimson;
-}
-
-@media (max-width: 768px) {
-  .game_card {
-    width: min(92vw, 420px);
-    margin: 0 auto 20px;
-  }
 }

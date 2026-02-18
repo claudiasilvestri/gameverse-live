@@ -1,32 +1,15 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  overflow-x: hidden;
-}
-
 .container {
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.main {
   width: 100%;
-  display: flex;
-  gap: 20px;
-}
-
-.sidebar {
-  background: #ffffffb3;
+  box-sizing: border-box;
   padding: 20px;
-  width: 250px;
-  border-radius: 10px;
-  flex-shrink: 0;
 }
 
-.games {
-  flex: 1;
-  min-width: 0;
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #f20065;
+  margin-bottom: 20px;
 }
 
 .games_wrapper {
@@ -36,62 +19,14 @@ html, body {
   justify-content: center;
 }
 
-.dropdown {
-  margin-top: 10px;
-  margin-bottom: 40px;
+.empty {
+  margin-top: 40px;
+  text-align: center;
+  color: #777;
+  font-size: 1.1rem;
 }
-
-.dropdown summary {
-  font-weight: bold;
-  color: #4CAF50;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.dropdown summary::after {
-  content: " ▼";
-  font-size: 18px;
-  margin-left: 10px;
-}
-
-.dropdown ul {
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  max-height: 200px;
-  overflow-y: auto;
-  background: #ffffffb3;
-  border-radius: 5px;
-}
-
-.dropdown li {
-  font-weight: bold;
-  color: #171616;
-  padding: 10px 0;
-  font-size: 18px;
-}
-
-.dropdown li:last-child {
-  border-bottom: none;
-}
-
 
 @media (max-width: 768px) {
-
-  .main {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-  }
-
-  .games {
-    width: 100%;
-  }
 
   .container {
     padding: 10px;
@@ -102,7 +37,6 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 0;
   }
 
 }

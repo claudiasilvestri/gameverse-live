@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import "./Layout/global.css";
 import "./Layout/header.css";
 import "./Layout/BackButton.css";
 import "./Layout/Spinner.css";

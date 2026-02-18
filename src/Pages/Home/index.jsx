@@ -18,7 +18,7 @@ export default function Home() {
     try {
       const response = await fetch(`${BASE_URL}&page=${pageNum}`);
       const json = await response.json();
-      
+
       if (pageNum === 1) {
         setGames(json.results);
       } else {
@@ -50,19 +50,16 @@ export default function Home() {
     }
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      observerRef.current?.disconnect();
     };
   }, []);
 
   return (
     <div className={`${styles.main} ${styles.container}`}>
-     
       <div className={styles.content}>
         <h1 className={styles.title}>New and trending</h1>
 
-        <div className={styles.games_wrapper}>
+        <div className="games-grid">
           {games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}

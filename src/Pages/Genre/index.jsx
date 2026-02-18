@@ -89,8 +89,8 @@ export default function Genre() {
       <BackButton />
 
       {loading && page === 1 && <Spinner />}
+      <div className="games-grid">
 
-      <div className={styles.games_wrapper}>
         {games.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}
@@ -100,4 +100,4 @@ export default function Genre() {
 
     </div>
   );
-}
+}   

@@ -77,25 +77,25 @@ export default function Platform() {
     }
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      observerRef.current?.disconnect();
     };
   }, [nextPageData]);
 
   return (
     <div className={`${styles.main} ${styles.container}`}>
-      <BackButton />
+      <div className={styles.content}>
+        <BackButton />
 
-      {loading && page === 1 && <Spinner />}
+        {loading && page === 1 && <Spinner />}
 
-      <div className={styles.games_wrapper}>
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
+        <div className="games-grid">
+          {games.map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
+        </div>
+
+        <div ref={loadMoreRef} style={{ height: "20px" }} />
       </div>
-
-      <div ref={loadMoreRef} style={{ height: "20px" }} />
     </div>
   );
 }
