@@ -1,41 +1,15 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  overflow-x: hidden;
-}
-
 .container {
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.main {
   width: 100%;
-  display: flex;
-  gap: 20px;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .title {
-  width: 100%;
-  text-align: center;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: bold;
+  text-align: center;
   color: var(--primary);
-  margin: 20px 0 30px 0;
-}
-
-.sidebar {
-  background: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  width: 250px;
-  border-radius: var(--radius);
-  flex-shrink: 0;
-}
-
-.games {
-  flex: 1;
-  min-width: 0;
+  margin-bottom: 20px;
 }
 
 .games_wrapper {
@@ -45,61 +19,15 @@ html, body {
   justify-content: center;
 }
 
-.dropdown {
-  margin-top: 10px;
-  margin-bottom: 40px;
-}
-
-.dropdown summary {
-  font-weight: bold;
-  color: var(--secondary);
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.dropdown summary::after {
-  content: " ▼";
-  font-size: 18px;
-  margin-left: 10px;
-}
-
-.dropdown ul {
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  max-height: 200px;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: var(--radius);
-}
-
-.dropdown li {
-  font-weight: bold;
+.empty {
+  margin-top: 40px;
+  text-align: center;
   color: var(--text-dark);
-  padding: 10px 0;
-  font-size: 18px;
-}
-
-.dropdown li:last-child {
-  border-bottom: none;
+  opacity: 0.6;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {
-
-  .main {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-  }
-
-  .games {
-    width: 100%;
-  }
 
   .container {
     padding: 10px;
@@ -110,19 +38,5 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 0;
   }
-
-}
-
-button {
-  transition: background 0.2s ease, transform 0.15s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-}
-
-button:active {
-  transform: translateY(0);
 }

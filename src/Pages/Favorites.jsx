@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../Supabase/client";
-import { SessionContext } from "../Context/SessionContext";
-import GameCard from "../Components/GameCard";
-import Spinner from "../Components/Spinner";
+import { supabase } from "../supabase/client";
+import { SessionContext } from "../context/SessionContext";
+import GameCard from "../components/GameCard";
+import Spinner from "../components/Spinner";
 import styles from "./Home/Home.module.css";
-import "../Layout/BackButton.css";
+import "../layout/BackButton.css";
 
 const BASE_URL = "https://api.rawg.io/api/games/";
 const API_KEY = "c6d86a1b0cfc40fa8902c3705680c2ed";
@@ -31,7 +31,7 @@ export default function Favorites() {
         .order("created_at", { ascending: false });
 
       setFavorites(data || []);
-      setLoading(false); 
+      setLoading(false);
     };
 
     fetchFavorites();
@@ -68,31 +68,37 @@ export default function Favorites() {
   }, [favorites, user]);
 
   return (
-    <div className={`${styles.main} ${styles.container}`}>
+    <main className={`${styles.main} ${styles.container}`}>
       <div className={styles.content}>
         <h1 className={styles.title}>Favorites</h1>
 
         {!user ? (
           <p className={styles.empty}>
-            Please log in to view your favorites ❤️
+            Please login to view your favorites 
           </p>
         ) : (
           <>
             <button
               className="backButtonFixed"
               onClick={() => navigate(-1)}
+              aria-label="Go back to previous page"
             >
               ← Back
             </button>
 
             {loading ? (
-              <Spinner />
+              <div role="status" aria-live="polite">
+                <Spinner />
+              </div>
             ) : games.length === 0 ? (
               <p className={styles.empty}>
                 You haven’t added any favorites yet ❤️
               </p>
             ) : (
-           <div className="games-grid">
+              <section
+                className="games-grid"
+                aria-label="List of favorite games"
+              >
                 {games.map((game) => (
                   <GameCard
                     key={game.id}
@@ -104,11 +110,11 @@ export default function Favorites() {
                     }
                   />
                 ))}
-              </div>
+              </section>
             )}
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 }

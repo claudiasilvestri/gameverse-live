@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import "../Layout/BackButton.css";
+import "../layout/BackButton.css";
 
 export default function BackButton() {
   const navigate = useNavigate();
 
   return (
     <button
+      type="button"
       className="backButtonFixed"
       onClick={() => navigate(-1)}
+      aria-label="Go back to previous page"
     >
-      ← Back
+      <span aria-hidden="true">←</span> Back
     </button>
   );
 }

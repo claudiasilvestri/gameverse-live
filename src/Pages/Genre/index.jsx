@@ -7,10 +7,13 @@ import BackButton from "../../components/BackButton";
 
 const BASE_URL =
   "https://api.rawg.io/api/games?key=c6d86a1b0cfc40fa8902c3705680c2ed";
+const GENRES_URL =
+  "https://api.rawg.io/api/genres?key=c6d86a1b0cfc40fa8902c3705680c2ed";
 
 export default function Genre() {
   const { id } = useParams();
 
+  const [genreName, setGenreName] = useState("");
   const [games, setGames] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -20,26 +23,34 @@ export default function Genre() {
   const loadMoreRef = useRef(null);
 
   useEffect(() => {
+    const fetchGenreName = async () => {
+      try {
+        const response = await fetch(GENRES_URL);
+        const data = await response.json();
+        const found = data.results.find((g) => g.id.toString() === id);
+        setGenreName(found ? found.name : "Unknown Genre");
+      } catch {
+        setGenreName("Unknown Genre");
+      }
+    };
+    fetchGenreName();
+  }, [id]);
+
+  useEffect(() => {
     setGames([]);
     setPage(1);
     setNextPageData(null);
   }, [id]);
 
   useEffect(() => {
-    const fetchGenres = async () => {
+    const fetchGames = async () => {
       setLoading(true);
-
       try {
-        const response = await fetch(
-          `${BASE_URL}&genres=${id}&page=${page}`
-        );
+        const response = await fetch(`${BASE_URL}&genres=${id}&page=${page}`);
         const json = await response.json();
 
-        if (page === 1) {
-          setGames(json.results);
-        } else {
-          setGames((prev) => [...prev, ...json.results]);
-        }
+        if (page === 1) setGames(json.results);
+        else setGames((prev) => [...prev, ...json.results]);
 
         if (json.next) {
           const nextResponse = await fetch(
@@ -57,7 +68,7 @@ export default function Genre() {
       }
     };
 
-    fetchGenres();
+    fetchGames();
   }, [id, page]);
 
   useEffect(() => {
@@ -77,29 +88,40 @@ export default function Genre() {
     }
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      observerRef.current?.disconnect();
     };
   }, [nextPageData]);
 
   return (
-    <div className={`${styles.main} ${styles.container}`}>
-      <BackButton />
+    <main className={`${styles.main} ${styles.container}`}>
+      <div className={styles.content}>
+        <BackButton />
 
-      <h1 className={styles.title}>
-        {id.charAt(0).toUpperCase() + id.slice(1)}
-      </h1>
+        <h1 className={styles.title}>
+          {genreName}
+        </h1>
 
-      {loading && page === 1 && <Spinner />}
+        {loading && page === 1 && (
+          <div role="status" aria-live="polite">
+            <Spinner />
+          </div>
+        )}
 
-      <div className="games-grid">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
+        <section
+          className="games-grid"
+          aria-label={`Games in ${genreName} genre`}
+        >
+          {games.map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
+        </section>
+
+        <div
+          ref={loadMoreRef}
+          style={{ height: "20px" }}
+          aria-hidden="true"
+        />
       </div>
-
-      <div ref={loadMoreRef} style={{ height: "20px" }} />
-    </div>
+    </main>
   );
 }

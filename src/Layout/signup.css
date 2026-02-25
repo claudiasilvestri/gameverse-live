@@ -71,6 +71,14 @@
   border-color: var(--secondary);
   outline: none;
 }
+:focus-visible {
+  outline: 3px solid var(--primary);
+}
+
+input:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
 
 .signup-button {
   background-color: var(--secondary);

@@ -4,7 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 import "../layout/Header.css";
 import SearchBar from "./SearchBar";
 import "../layout/signup.css";
-import { supabase } from "../Supabase/client";
+import { supabase } from "../supabase/client";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
@@ -33,10 +33,10 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" role="navigation" aria-label="Main navigation">
       <div className="navbar-left">
-        <Link to="/" className="navbar-brand">
-          <span className="navbar-icon">🎮</span>
+        <Link to="/" className="navbar-brand" aria-label="Go to homepage">
+          <span className="navbar-icon" aria-hidden="true">🎮</span>
           <span className="navbar-title">GameVerse</span>
         </Link>
       </div>
@@ -62,8 +62,9 @@ export default function Navbar() {
             <button
               className="account-btn"
               onClick={() => navigate("/account")}
+              aria-label="Open account page"
             >
-              <FaUserCircle />
+              <FaUserCircle aria-hidden="true" />
               <span className="account-name">
                 {user?.user_metadata?.username
                   ? user.user_metadata.username.charAt(0).toUpperCase() +

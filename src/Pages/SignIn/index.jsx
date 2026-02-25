@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../Layout/signin.css";
-import { supabase } from "../../Supabase/client";
+import "../../layout/signin.css";
+import { supabase } from "../../supabase/client";
 import { Toaster, toast } from "sonner";
 
 const SignIn = () => {
@@ -70,9 +70,13 @@ const SignIn = () => {
   };
 
   return (
-    <div className="signin-container">
+    <main className="signin-container">
       {successMessage && (
-        <div className="success_message">
+        <div
+          className="success_message"
+          role="status"
+          aria-live="polite"
+        >
           Login successful!
           <br />
           Redirecting to Home...
@@ -91,6 +95,7 @@ const SignIn = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="email"
             className="form-control"
           />
         </div>
@@ -104,6 +109,7 @@ const SignIn = () => {
             value={formData.password}
             onChange={handleChange}
             required
+            autoComplete="current-password"
             className="form-control"
           />
         </div>
@@ -116,15 +122,16 @@ const SignIn = () => {
                 checked={rememberMe}
                 onChange={handleRememberMeChange}
                 className="remember-me-input"
+                aria-label="Remember login credentials"
               />
-              <span className="slider"></span>
+              <span className="slider" aria-hidden="true"></span>
             </div>
             <span>Remember me</span>
           </label>
         </div>
 
         <button type="submit" className="signin-button">
-          Login now
+          Login
         </button>
       </form>
 
@@ -133,7 +140,7 @@ const SignIn = () => {
       </p>
 
       <Toaster position="bottom-center" />
-    </div>
+    </main>
   );
 };
 

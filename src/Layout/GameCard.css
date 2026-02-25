@@ -13,15 +13,16 @@
   text-align: center;
   transition: transform 0.3s ease;
   position: relative;
+  height: 100%;
 }
 
 .game_card:hover {
   transform: translateY(-5px);
 }
 
-.game-image {
+.game_card .game-image {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 200px;
   object-fit: cover;
   border-radius: var(--radius);
   display: block;
@@ -41,6 +42,11 @@
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
   padding-right: 40px;
+}
+
+.game_card:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
 }
 
 .read_more {
@@ -114,4 +120,24 @@
   width: 22px;
   height: 22px;
   fill: var(--favorite);
+}
+
+@media (max-width: 768px) {
+  .game_card {
+    padding: 16px;
+  }
+
+  .game_card .game-image {
+    height: 160px;
+  }
+
+  .game_title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game_card .game-image {
+    height: 140px;
+  }
 }

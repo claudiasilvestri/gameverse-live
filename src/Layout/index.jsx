@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../Components/Header";
-import Sidebar from "../Components/Sidebar";
-import "../Layout/Layout.css";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import "../layout/Layout.css";
 
 export default function Index() {
   const [sidebarOpen, setSidebarOpen] = useState(true);

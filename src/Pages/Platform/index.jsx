@@ -7,10 +7,13 @@ import BackButton from "../../components/BackButton";
 
 const BASE_URL =
   "https://api.rawg.io/api/games?key=c6d86a1b0cfc40fa8902c3705680c2ed";
+const PLATFORMS_URL =
+  "https://api.rawg.io/api/platforms?key=c6d86a1b0cfc40fa8902c3705680c2ed";
 
 export default function Platform() {
   const { platformID } = useParams();
 
+  const [platformName, setPlatformName] = useState("");
   const [games, setGames] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -20,26 +23,38 @@ export default function Platform() {
   const loadMoreRef = useRef(null);
 
   useEffect(() => {
+    const fetchPlatformName = async () => {
+      try {
+        const response = await fetch(PLATFORMS_URL);
+        const data = await response.json();
+        const found = data.results.find(
+          (p) => p.id.toString() === platformID
+        );
+        setPlatformName(found ? found.name : "Unknown Platform");
+      } catch {
+        setPlatformName("Unknown Platform");
+      }
+    };
+    fetchPlatformName();
+  }, [platformID]);
+
+  useEffect(() => {
     setGames([]);
     setPage(1);
     setNextPageData(null);
   }, [platformID]);
 
   useEffect(() => {
-    const fetchPlatforms = async () => {
+    const fetchGames = async () => {
       setLoading(true);
-
       try {
         const response = await fetch(
           `${BASE_URL}&platforms=${platformID}&page=${page}`
         );
         const json = await response.json();
 
-        if (page === 1) {
-          setGames(json.results);
-        } else {
-          setGames((prev) => [...prev, ...json.results]);
-        }
+        if (page === 1) setGames(json.results);
+        else setGames((prev) => [...prev, ...json.results]);
 
         if (json.next) {
           const nextResponse = await fetch(
@@ -57,7 +72,7 @@ export default function Platform() {
       }
     };
 
-    fetchPlatforms();
+    fetchGames();
   }, [platformID, page]);
 
   useEffect(() => {
@@ -82,25 +97,34 @@ export default function Platform() {
   }, [nextPageData]);
 
   return (
-    <div className={`${styles.main} ${styles.container}`}>
+    <main className={`${styles.main} ${styles.container}`}>
       <div className={styles.content}>
         <BackButton />
 
-        <h1 className={styles.title}>
-          Platform {platformID}
-        </h1>
+        <h1 className={styles.title}>{platformName}</h1>
 
-        {loading && page === 1 && <Spinner />}
+        {loading && page === 1 && (
+          <div role="status" aria-live="polite">
+            <Spinner />
+          </div>
+        )}
 
-        <div className="games-grid">
+        <section
+          className="games-grid"
+          aria-label={`Games available on ${platformName}`}
+        >
           {games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
-        </div>
+        </section>
 
-        <div ref={loadMoreRef} style={{ height: "20px" }} />
+        <div
+          ref={loadMoreRef}
+          style={{ height: "20px" }}
+          aria-hidden="true"
+        />
       </div>
-    </div>
+    </main>
   );
 }
 

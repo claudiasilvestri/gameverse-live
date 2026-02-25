@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./game.module.css";
 import GameImage from "../../components/GameImage";
@@ -9,7 +9,7 @@ import noTrailer from "../../Assets/No-Trailer.jpg";
 const API_KEY = "c6d86a1b0cfc40fa8902c3705680c2ed";
 const YT_KEY = import.meta.env.VITE_YOUTUBE_KEY;
 
-function Carousel({ images }) {
+function Carousel({ images, gameName }) {
   const [scrollIndex, setScrollIndex] = useState(0);
 
   const handleScrollLeft = () => {
@@ -25,6 +25,7 @@ function Carousel({ images }) {
       <button
         onClick={handleScrollLeft}
         className={`${styles.scrollButton} ${styles.leftButton}`}
+        aria-label={`Previous screenshot of ${gameName}`}
       >
         ‹
       </button>
@@ -35,7 +36,10 @@ function Carousel({ images }) {
       >
         {images.map((image, index) => (
           <div key={index} className={styles.carouselImageWrapper}>
-            <GameImage image={image} className={styles.carouselShot} />
+            <GameImage
+              image={image}
+              alt={`${gameName} screenshot ${index + 1}`}
+            />
           </div>
         ))}
       </div>
@@ -43,6 +47,7 @@ function Carousel({ images }) {
       <button
         onClick={handleScrollRight}
         className={`${styles.scrollButton} ${styles.rightButton}`}
+        aria-label={`Next screenshot of ${gameName}`}
       >
         ›
       </button>
@@ -59,6 +64,8 @@ export default function Game() {
   const [youtubeId, setYoutubeId] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const trailerButtonRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +98,7 @@ export default function Game() {
 
           if (video) {
             setTrailerUrl(video);
+            setLoading(false);
             return;
           }
         }
@@ -116,9 +124,41 @@ export default function Game() {
     fetchData();
   }, [id]);
 
-  if (loading) {
-    return <Spinner />;
-  }
+  useEffect(() => {
+    if (showTrailer) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+      trailerButtonRef.current?.focus();
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showTrailer]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowTrailer(false);
+      }
+    };
+
+    if (showTrailer) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showTrailer]);
+
+  if (loading) return <Spinner />;
+
+  const formattedDescription = game?.description?.replace(
+    /<p>([A-Z0-9\s&–\-:]+)<\/p>/g,
+    "<h3>$1</h3>"
+  );
 
   return (
     <div className={styles.centeredContainer}>
@@ -131,40 +171,74 @@ export default function Game() {
           <GameImage
             image={game.background_image}
             className={styles.gameCover}
+            alt={`${game.name} cover image`}
           />
 
           {screenshots.length > 0 && (
             <Carousel
               images={screenshots.map((s) => s.image).filter(Boolean)}
+              gameName={game.name}
             />
           )}
 
           {trailerUrl || youtubeId ? (
             <button
+              ref={trailerButtonRef}
               className={styles.trailerButton}
+              aria-label={`Watch trailer for ${game.name}`}
+              aria-haspopup="dialog"
+              aria-expanded={showTrailer}
               onClick={() => setShowTrailer(true)}
             >
-              Guarda Trailer
+              Watch Trailer
             </button>
           ) : (
             <div className={styles.noTrailerBox}>
               <img
                 src={noTrailer}
-                alt="No trailer available"
+                alt={`No trailer available for ${game.name}`}
                 className={styles.noTrailerImage}
               />
             </div>
           )}
 
+          <div className={styles.contentBlock}>
+            <h2 className={styles.sectionTitle}>Overview</h2>
+
+            <div
+              className={styles.description}
+              dangerouslySetInnerHTML={{ __html: formattedDescription }}
+            />
+          </div>
+
+          <div className={styles.metaSection}>
+            <div className={styles.metaItem}>
+              <span className={styles.metaLabel}>Rating</span>
+              <span className={styles.metaValue}>{game.rating}</span>
+            </div>
+
+            <div className={styles.metaItem}>
+              <span className={styles.metaLabel}>Released</span>
+              <span className={styles.metaValue}>{game.released}</span>
+            </div>
+          </div>
+
           {showTrailer && (
             <div
               className={styles.modalOverlay}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="trailer-title"
               onClick={() => setShowTrailer(false)}
             >
               <div
                 className={styles.modalContent}
                 onClick={(e) => e.stopPropagation()}
               >
+                <h2 id="trailer-title" className="sr-only">
+                  {game.name} Trailer
+                </h2>
+
                 <div className={styles.videoWrapper}>
                   {trailerUrl ? (
                     <video controls autoPlay className={styles.trailerVideo}>
@@ -174,7 +248,7 @@ export default function Game() {
                     <iframe
                       className={styles.trailerVideo}
                       src={`https://www.youtube.com/embed/${youtubeId}`}
-                      title="YouTube Trailer"
+                      title={`${game.name} Trailer`}
                       allowFullScreen
                     />
                   )}
@@ -182,10 +256,6 @@ export default function Game() {
               </div>
             </div>
           )}
-
-          <p>{game.description_raw}</p>
-          <p className={styles.bold}>Rating: {game.rating}</p>
-          <p className={styles.bold}>Released: {game.released}</p>
         </div>
       )}
     </div>

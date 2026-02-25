@@ -33,28 +33,35 @@ export default function SearchResults() {
   }, [query]);
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div role="status" aria-live="polite">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
-    <div className="container">
+    <main className="container">
       <BackButton />
 
       <h1 className="title">
-        Results for "{query}"
+        Results for <em>{query}</em>
       </h1>
 
       {results.length === 0 ? (
         <p className="empty">
-          Nessun risultato trovato.
+          No results found.
         </p>
       ) : (
-        <div className="games-grid">
+        <section
+          className="games-grid"
+          aria-label={`Search results for ${query}`}
+        >
           {results.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 }

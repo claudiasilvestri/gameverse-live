@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "../Layout/Sidebar.css";
+import "../layout/Sidebar.css";
 
 export default function Sidebar() {
   const [genres, setGenres] = useState([]);

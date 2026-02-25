@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../layout/signup.css";
-import { supabase } from "../../Supabase/client";
+import { supabase } from "../../supabase/client";
 import { Toaster, toast } from "sonner";
 
 const SignUp = () => {
@@ -64,9 +64,13 @@ const SignUp = () => {
   };
 
   return (
-    <div className="signup-container">
+    <main className="signup-container">
       {successMessage && (
-        <div className="success_message">
+        <div
+          className="success_message"
+          role="status"
+          aria-live="polite"
+        >
           Registration successful!
           <br />
           Redirecting to Home...
@@ -85,6 +89,7 @@ const SignUp = () => {
             value={formData.first_name}
             onChange={handleChange}
             required
+            autoComplete="given-name"
           />
         </div>
 
@@ -97,6 +102,7 @@ const SignUp = () => {
             value={formData.last_name}
             onChange={handleChange}
             required
+            autoComplete="family-name"
           />
         </div>
 
@@ -109,6 +115,7 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleChange}
             required
+            autoComplete="username"
           />
         </div>
 
@@ -121,6 +128,7 @@ const SignUp = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="email"
           />
         </div>
 
@@ -133,6 +141,7 @@ const SignUp = () => {
             value={formData.password}
             onChange={handleChange}
             required
+            autoComplete="new-password"
           />
         </div>
 
@@ -145,8 +154,9 @@ const SignUp = () => {
                 name="rememberMe"
                 checked={formData.rememberMe}
                 onChange={handleChange}
+                aria-label="Remember login credentials"
               />
-              <span className="slider"></span>
+              <span className="slider" aria-hidden="true"></span>
             </div>
             <span>Remember me</span>
           </label>
@@ -161,10 +171,10 @@ const SignUp = () => {
 
       <div className="already-registered">
         <p>
-          Already registered? <Link to="/login">Log in</Link>
+          Already registered? <Link to="/login">Login</Link>
         </p>
       </div>
-    </div>
+    </main>
   );
 };
 

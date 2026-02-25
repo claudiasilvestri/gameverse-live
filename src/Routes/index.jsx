@@ -6,23 +6,23 @@ import {
   Outlet,
 } from "react-router-dom";
 import { useContext } from "react";
-import { SessionContext } from "../Context/SessionContext";
+import { SessionContext } from "../context/SessionContext";
 
-import Navbar from "../Components/Header";
-import Sidebar from "../Components/Sidebar";
+import Navbar from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
-import Home from "../Pages/Home";
-import Genre from "../Pages/Genre";
-import Game from "../Pages/Game";
-import Platform from "../Pages/Platform";
-import SearchResults from "../Pages/SearchResults";
-import SignUp from "../Pages/SignUp";
-import SignIn from "../Pages/SignIn";
-import Account from "../Pages/Account";
-import Favorites from "../Pages/Favorites";
+import Home from "../pages/Home";
+import Genre from "../pages/Genre";
+import Game from "../pages/Game";
+import Platform from "../pages/Platform";
+import SearchResults from "../pages/SearchResults";
+import SignUp from "../pages/SignUp";
+import SignIn from "../pages/SignIn";
+import Account from "../pages/Account";
+import Favorites from "../pages/Favorites";
 
 import Spinner from "../components/Spinner";
-import "../Layout/Layout.css";
+import "../layout/Layout.css";
 
 function LayoutHome() {
   return (

@@ -52,5 +52,9 @@ li {
 .sidebar a:active {
   color: var(--primary);
   background: rgba(242, 0, 101, 0.12);
-  outline: none;
+outline: none;
 }
+:focus-visible {
+  outline: 3px solid var(--primary);
+}
+

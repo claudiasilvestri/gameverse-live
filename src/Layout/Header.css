@@ -39,6 +39,13 @@
   gap: 14px;
 }
 
+.navbar a:focus-visible,
+.account-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .auth-btn,
 .auth-btn:link,
 .auth-btn:visited,

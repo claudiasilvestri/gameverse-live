@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { supabase } from "../Supabase/client";
-import { useSession } from "../Context/SessionContext";
+import { supabase } from "../supabase/client";
+import { useSession } from "../context/SessionContext";
 import GameImage from "./GameImage";
-import "../Layout/GameCard.css";
+import "../layout/GameCard.css";
 import { toast } from "sonner";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { FaWindows, FaPlaystation, FaXbox, FaApple } from "react-icons/fa";
@@ -22,11 +22,11 @@ export default function GameCard({ game, onRemove }) {
   const getPlatformIcon = (platform) => {
     const name = platform.toLowerCase();
 
-    if (name.includes("pc")) return <FaWindows />;
-    if (name.includes("playstation")) return <FaPlaystation />;
-    if (name.includes("xbox")) return <FaXbox />;
-    if (name.includes("nintendo")) return <SiNintendo />;
-    if (name.includes("mac")) return <FaApple />;
+    if (name.includes("pc")) return <FaWindows aria-hidden="true" />;
+    if (name.includes("playstation")) return <FaPlaystation aria-hidden="true" />;
+    if (name.includes("xbox")) return <FaXbox aria-hidden="true" />;
+    if (name.includes("nintendo")) return <SiNintendo aria-hidden="true" />;
+    if (name.includes("mac")) return <FaApple aria-hidden="true" />;
 
     return null;
   };
@@ -56,7 +56,7 @@ export default function GameCard({ game, onRemove }) {
     e.stopPropagation();
 
     if (!user) {
-      toast.error("Please log in to use favorites ❤️", {
+      toast.error("Please login to use favorites", {
         id: "auth-required",
         duration: 2000,
       });
@@ -78,16 +78,11 @@ export default function GameCard({ game, onRemove }) {
         setIsFavorite(true);
 
         if (!onRemove) {
-          toast.success("Added to favorites ❤️", {
+          toast.success("Added to favorites", {
             id: "fav-action",
             duration: 1600,
           });
         }
-      } else {
-        toast.error("Something went wrong", {
-          id: "fav-error",
-          duration: 2000,
-        });
       }
     } else {
       const { error } = await supabase
@@ -107,11 +102,6 @@ export default function GameCard({ game, onRemove }) {
             duration: 1600,
           });
         }
-      } else {
-        toast.error("Something went wrong", {
-          id: "fav-error",
-          duration: 2000,
-        });
       }
     }
 
@@ -124,18 +114,26 @@ export default function GameCard({ game, onRemove }) {
       onMouseEnter={() => setHidden(false)}
       onMouseLeave={() => setHidden(true)}
       onClick={() => navigate(`/games/${game.id}/${game.name}`)}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open details for ${game.name}`}
     >
       <button
         className="favorite_btn"
         onClick={handleToggleFavorite}
         disabled={loadingFav}
+        aria-label={
+          isFavorite
+            ? `Remove ${game.name} from favorites`
+            : `Add ${game.name} to favorites`
+        }
       >
-        {isFavorite ? <FaHeart /> : <FaRegHeart />}
+        {isFavorite ? <FaHeart aria-hidden="true" /> : <FaRegHeart aria-hidden="true" />}
       </button>
 
       <div className="game_genres">{genres}</div>
 
-      <div className="platform-icons">
+      <div className="platform-icons" aria-hidden="true">
         {game.parent_platforms?.map((p, index) => (
           <span
             key={index}
@@ -146,7 +144,10 @@ export default function GameCard({ game, onRemove }) {
         ))}
       </div>
 
-      <GameImage image={game.background_image} />
+      <GameImage
+        image={game.background_image}
+        alt={`${game.name} cover image`}
+      />
 
       <h4 className="game_title">{game.name}</h4>
 
@@ -168,4 +169,3 @@ export default function GameCard({ game, onRemove }) {
     </article>
   );
 }
-

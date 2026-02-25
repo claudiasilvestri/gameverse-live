@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../Supabase/client";
-import { useSession } from "../../Context/SessionContext";
+import { supabase } from "../../supabase/client";
+import { useSession } from "../../context/SessionContext";
 import styles from "./Account.module.css";
 import {
   FaUserCircle,
@@ -50,11 +50,7 @@ export default function Account() {
 
   useEffect(() => {
     if (!message) return;
-
-    const timer = setTimeout(() => {
-      setMessage("");
-    }, 3000);
-
+    const timer = setTimeout(() => setMessage(""), 3000);
     return () => clearTimeout(timer);
   }, [message]);
 
@@ -64,16 +60,12 @@ export default function Account() {
   };
 
   const handlePasswordReset = async () => {
-    await supabase.auth.resetPasswordForEmail(user.email);
+    setConfirmDelete(false);
     setMessage("Password reset email sent.");
+    await supabase.auth.resetPasswordForEmail(user.email);
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirmDelete) {
-      setConfirmDelete(true);
-      return;
-    }
-
     if (isDeleting) return;
 
     setIsDeleting(true);
@@ -89,15 +81,11 @@ export default function Account() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-
-        {message && (
-          <div className={styles.successMessage}>
-            {message}
-          </div>
-        )}
-
-        <div className={styles.header}>
-          <FaUserCircle className={styles.avatar} />
+        <header className={styles.header}>
+          <FaUserCircle
+            className={styles.avatar}
+            aria-hidden="true"
+          />
           <h1>{user.user_metadata?.username || "User"}</h1>
           <p className={styles.email}>{user.email}</p>
           <span className={styles.badge}>
@@ -108,14 +96,17 @@ export default function Account() {
               year: "numeric",
             })}
           </span>
-        </div>
+        </header>
 
-        <div className={styles.stats}>
-          <FaHeart className={styles.heartIcon} />
+        <section className={styles.stats}>
+          <FaHeart
+            className={styles.heartIcon}
+            aria-hidden="true"
+          />
           <span>{favoritesCount} Favorites</span>
-        </div>
+        </section>
 
-        <h3 className={styles.sectionTitle}>Your Collection</h3>
+        <h2 className={styles.sectionTitle}>Your Collection</h2>
 
         {recentFavorites.length > 0 ? (
           <>
@@ -129,6 +120,7 @@ export default function Account() {
               <button
                 className={styles.viewAllBtn}
                 onClick={() => navigate("/favorites")}
+                aria-label="View all favorite games"
               >
                 See all your favorites →
               </button>
@@ -140,44 +132,55 @@ export default function Account() {
             <button
               className={styles.exploreBtn}
               onClick={() => navigate("/")}
+              aria-label="Explore available games"
             >
               Explore Games
             </button>
           </div>
         )}
 
-        <h3 className={styles.sectionTitle}>Account Settings</h3>
+        <h2 className={styles.sectionTitle}>Account Settings</h2>
 
         <div className={styles.actions}>
           <button
             className={styles.secondaryBtn}
             onClick={handlePasswordReset}
+            aria-label="Send password reset email"
           >
-            <FaKey /> Change Password
+            <FaKey aria-hidden="true" /> Change Password
           </button>
 
           <button
             className={styles.neutralBtn}
             onClick={handleLogout}
+            aria-label="Log out from account"
           >
-            <FaSignOutAlt /> Logout
+            <FaSignOutAlt aria-hidden="true" /> Logout
           </button>
 
           {!confirmDelete ? (
             <button
               className={styles.dangerBtn}
-              onClick={handleDeleteAccount}
+              onClick={() => {
+                setConfirmDelete(true);
+                setMessage("");
+              }}
+              aria-label="Delete account"
             >
-              <FaTrash /> Delete Account
+              <FaTrash aria-hidden="true" /> Delete Account
             </button>
           ) : (
-            <div className={styles.confirmBox}>
+            <div
+              className={styles.confirmBox}
+              role="alert"
+            >
               <p>Are you sure you want to delete your account?</p>
               <div className={styles.confirmActions}>
                 <button
                   className={styles.dangerBtn}
                   onClick={handleDeleteAccount}
                   disabled={isDeleting}
+                  aria-label="Confirm account deletion"
                 >
                   {isDeleting ? "Deleting..." : "Yes, delete"}
                 </button>
@@ -185,6 +188,7 @@ export default function Account() {
                   className={styles.neutralBtn}
                   onClick={() => setConfirmDelete(false)}
                   disabled={isDeleting}
+                  aria-label="Cancel account deletion"
                 >
                   Cancel
                 </button>
@@ -193,8 +197,15 @@ export default function Account() {
           )}
         </div>
 
+        {message && (
+          <div
+            className={styles.successMessage}
+            role="status"
+          >
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
