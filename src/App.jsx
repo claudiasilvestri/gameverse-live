@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import { SessionContextProvider } from "./context/SessionContext";
 import { Toaster } from "sonner";
-import router from "./Routes";
+import router from "./routes";
 
 export function App() {
   return (
