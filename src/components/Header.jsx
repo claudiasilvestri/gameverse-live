@@ -4,7 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 import "../layout/Header.css";
 import SearchBar from "./SearchBar";
 import "../layout/signup.css";
-import { supabase } from "../supabase/client";
+import { supabase } from "../supabase/Client";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);

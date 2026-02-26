@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../supabase/client";
+import { supabase } from "../supabase/Client";
 import { SessionContext } from "../context/SessionContext";
 import GameCard from "../components/GameCard";
 import Spinner from "../components/Spinner";

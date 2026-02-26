@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { supabase } from "../supabase/client";
+import { supabase } from "../supabase/Client";
 import { useSession } from "../context/SessionContext";
 import GameImage from "./GameImage";
 import "../layout/GameCard.css";
