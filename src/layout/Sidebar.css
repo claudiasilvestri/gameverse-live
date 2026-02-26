@@ -1,0 +1,60 @@
+.sidebar {
+  width: 250px;
+  padding: 0 20px;
+  margin-top: 60px;
+}
+
+.details-wrapper {
+  background: var(--border-light);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.section {
+  margin-bottom: 8px;
+}
+
+.summary {
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+ul {
+  list-style: none;
+  padding-left: 16px;
+  margin: 6px 0 0;
+  max-height: 96px;
+  overflow-y: auto;
+}
+
+li {
+  margin: 4px 0;
+  border-radius: var(--radius);
+}
+
+.sidebar a {
+  display: block;
+  padding: 4px 6px;
+  color: var(--secondary);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar a:hover {
+  background: rgba(76, 175, 80, 0.08);
+}
+
+.sidebar a:focus,
+.sidebar a:active {
+  color: var(--primary);
+  background: rgba(242, 0, 101, 0.12);
+outline: none;
+}
+:focus-visible {
+  outline: 3px solid var(--primary);
+}
+
