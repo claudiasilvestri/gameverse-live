@@ -1,0 +1,126 @@
+:root {
+  --primary: #f20065;
+  --primary-hover: #c80054;
+  --secondary: #4caf50;
+  --secondary-hover: #3e8e41;
+  --favorite: #e53935;
+  --text-dark: #1a1a1a;
+  --text-light: #ffffff;
+  --bg-light: #ffffff;
+  --surface-dark: #222222;
+  --border-light: #e5e5e5;
+  --radius: 12px;
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.container {
+  width: 100%;
+}
+
+.main {
+  width: 100%;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  margin: 40px 0;
+  color: var(--primary);
+}
+
+.title em {
+  font-style: italic;
+  font-weight: 700;
+}
+
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+.games-grid {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.games-grid > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.lazy-load-image-background {
+  width: 100%;
+  display: block;
+}
+
+.lazy-load-image-background img {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+
+@media (max-width: 900px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

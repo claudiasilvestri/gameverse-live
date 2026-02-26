@@ -1,0 +1,145 @@
+.game_card {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius);
+  padding: 20px;
+  background-color: var(--surface-dark);
+  color: var(--text-light);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.game_card:hover {
+  transform: translateY(-5px);
+}
+
+.game_card .game-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  display: block;
+}
+
+.game_title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary);
+  font-style: italic;
+  margin-top: 12px;
+}
+
+.game_genres {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  padding-right: 40px;
+}
+
+.game_card:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.read_more {
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  margin-top: 12px;
+  transition: color 0.3s ease;
+}
+
+.read_more:hover {
+  color: var(--primary);
+}
+
+.game_info {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-top: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.platform-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.platform-icon {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.platform-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.platform-icon.nintendo svg {
+  width: 24px;
+  height: 24px;
+}
+
+.platform-icon.pc { color: #00aaff; }
+.platform-icon.playstation { color: #003cff; }
+.platform-icon.xbox { color: #00c853; }
+.platform-icon.nintendo { color: #ff3b3b; }
+.platform-icon.mac { color: #cccccc; }
+
+.favorite_btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--favorite);
+}
+
+.favorite_btn svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--favorite);
+}
+
+@media (max-width: 768px) {
+  .game_card {
+    padding: 16px;
+  }
+
+  .game_card .game-image {
+    height: 160px;
+  }
+
+  .game_title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game_card .game-image {
+    height: 140px;
+  }
+}

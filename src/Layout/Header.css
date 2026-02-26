@@ -1,0 +1,160 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: rgba(26, 26, 26, 0.9);
+  backdrop-filter: blur(8px);
+  color: var(--text-light);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.navbar-icon {
+  font-size: 42px;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(242, 0, 101, 0.6));
+}
+
+.navbar-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.navbar a:focus-visible,
+.account-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.auth-btn,
+.auth-btn:link,
+.auth-btn:visited,
+.auth-btn:active,
+.auth-btn:focus {
+  padding: 8px 16px;
+  background-color: var(--secondary);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.auth-btn:hover {
+  background-color: var(--secondary-hover);
+  transform: translateY(-2px);
+}
+
+.account-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--primary);
+  transition: color 0.2s ease;
+}
+
+.account-btn svg {
+  font-size: 22px;
+}
+
+.account-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--primary);
+  transition: width 0.25s ease;
+}
+
+.account-btn:hover {
+  color: var(--primary-hover);
+}
+
+.account-btn:hover::after {
+  width: 100%;
+}
+
+.account-name {
+  white-space: nowrap;
+}
+
+.search-btn {
+  padding: 5px 12px;
+  background-color: var(--secondary);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-left: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.search-btn:hover {
+  background-color: var(--secondary-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .navbar-left {
+    justify-content: center;
+  }
+
+  .navbar-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .auth-btn {
+    font-size: 13px;
+  }
+
+  .account-btn {
+    font-size: 13px;
+  }
+}
