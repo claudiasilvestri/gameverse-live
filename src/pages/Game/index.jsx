@@ -6,8 +6,8 @@ import BackButton from "../../components/BackButton";
 import Spinner from "../../components/Spinner";
 import noTrailer from "../../Assets/No-Trailer.jpg";
 
-const API_KEY = "c6d86a1b0cfc40fa8902c3705680c2ed";
-const YT_KEY = import.meta.env.VITE_YOUTUBE_KEY;
+const API_KEY = import.meta.env.VITE_RAWG_API_KEY;
+const YT_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 function Carousel({ images, gameName }) {
   const [scrollIndex, setScrollIndex] = useState(0);
