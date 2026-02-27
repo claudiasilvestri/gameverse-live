@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./game.module.css";
-import GameImage from "../../components/GameImage";
 import BackButton from "../../components/BackButton";
 import Spinner from "../../components/Spinner";
 import noTrailer from "../../Assets/No-Trailer.jpg";
+import noCover from "../../Assets/No-Cover.jpg";
 
 const API_KEY = import.meta.env.VITE_RAWG_API_KEY;
 const YT_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
@@ -36,8 +36,9 @@ function Carousel({ images, gameName }) {
       >
         {images.map((image, index) => (
           <div key={index} className={styles.carouselImageWrapper}>
-            <GameImage
-              image={image}
+            <img
+              src={image || noCover}
+              onError={(e) => (e.currentTarget.src = noCover)}
               alt={`${gameName} screenshot ${index + 1}`}
             />
           </div>
@@ -95,7 +96,6 @@ export default function Game() {
           const movie = trailerData.results[0];
           const video =
             movie.data?.max || movie.data?.["480"] || movie.data?.["360"];
-
           if (video) {
             setTrailerUrl(video);
             setLoading(false);
@@ -105,17 +105,88 @@ export default function Game() {
 
         const ytRes = await fetch(
           `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-            gameData.name + " videogame official trailer"
-          )}&key=${YT_KEY}&maxResults=5&type=video`
+            gameData.name + " trailer"
+          )}&key=${YT_KEY}&maxResults=8&type=video&videoEmbeddable=true&order=relevance`
         );
 
         const ytData = await ytRes.json();
 
         if (ytData.items?.length > 0) {
-          setYoutubeId(ytData.items[0].id.videoId);
+          const excludedWords = [
+            "walkthrough",
+            "gameplay",
+            "reaction",
+            "review",
+            "cutscene",
+            "fan made",
+            "full game",
+            "part 1",
+            "analysis",
+            "preview",
+            "playthrough",
+          ];
+
+          const trustedChannels = [
+            "nintendo",
+            "playstation",
+            "xbox",
+            "bandai namco",
+            "capcom",
+            "ubisoft",
+            "electronic arts",
+            "square enix",
+            "sega",
+            "bethesda",
+            "activision",
+            "warner bros",
+            "rockstar games",
+          ];
+
+          const normalizedGameName = gameData.name
+            .toLowerCase()
+            .replace(/[^\w\s]/gi, "")
+            .trim();
+
+          const scored = ytData.items
+            .map((item) => {
+              const title = item.snippet.title.toLowerCase();
+              const channel = item.snippet.channelTitle.toLowerCase();
+              const normalizedTitle = title.replace(/[^\w\s]/gi, "");
+
+              const containsExcluded = excludedWords.some((word) =>
+                normalizedTitle.includes(word)
+              );
+
+              if (containsExcluded) return null;
+
+              let score = 0;
+
+              if (normalizedTitle.includes(normalizedGameName)) score += 3;
+              if (normalizedTitle.includes("official trailer")) score += 5;
+              if (normalizedTitle.includes("launch trailer")) score += 4;
+              if (normalizedTitle.includes("announcement trailer")) score += 4;
+              if (normalizedTitle.includes("reveal trailer")) score += 4;
+              if (channel.includes("official")) score += 3;
+
+              if (
+                trustedChannels.some((brand) => channel.includes(brand))
+              ) {
+                score += 5;
+              }
+
+              return { item, score };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.score - a.score);
+
+          if (scored.length > 0 && scored[0].score >= 6) {
+            setYoutubeId(scored[0].item.id.videoId);
+          } else {
+            setYoutubeId(null);
+          }
         }
       } catch (error) {
-        console.error("Errore nel fetch:", error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -168,15 +239,16 @@ export default function Game() {
 
           <h1 className={styles.gameTitle}>{game.name}</h1>
 
-          <GameImage
-            image={game.background_image}
+          <img
+            src={game.background_image || noCover}
+            onError={(e) => (e.currentTarget.src = noCover)}
             className={styles.gameCover}
             alt={`${game.name} cover image`}
           />
 
           {screenshots.length > 0 && (
             <Carousel
-              images={screenshots.map((s) => s.image).filter(Boolean)}
+              images={screenshots.map((s) => s.image)}
               gameName={game.name}
             />
           )}
@@ -185,9 +257,6 @@ export default function Game() {
             <button
               ref={trailerButtonRef}
               className={styles.trailerButton}
-              aria-label={`Watch trailer for ${game.name}`}
-              aria-haspopup="dialog"
-              aria-expanded={showTrailer}
               onClick={() => setShowTrailer(true)}
             >
               Watch Trailer
@@ -196,6 +265,7 @@ export default function Game() {
             <div className={styles.noTrailerBox}>
               <img
                 src={noTrailer}
+                onError={(e) => (e.currentTarget.src = noTrailer)}
                 alt={`No trailer available for ${game.name}`}
                 className={styles.noTrailerImage}
               />
@@ -227,7 +297,6 @@ export default function Game() {
               <button
                 className={styles.closeButton}
                 onClick={() => setShowTrailer(false)}
-                aria-label="Close trailer"
               >
                 ×
               </button>
